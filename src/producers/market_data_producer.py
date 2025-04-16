@@ -1,6 +1,7 @@
 # trading_system/src/producers/market_data_producer.py
 # Simulates market data and sends it to Kafka
 import random
+import json
 from datetime import datetime
 from time import sleep
 from typing import List, Generator
@@ -8,7 +9,7 @@ from typing import List, Generator
 from kafka import KafkaProducer
 from src.core.event_model import MarketEvent
 from src.config.settings import KAFKA_BROKERS, MARKET_EVENTS_TOPIC
-import json
+from src.utils.serializers import market_event_serializer
 
 def market_data_generator(symbols: List[str], num_events: int) -> Generator[MarketEvent, None, None]:
     """
@@ -29,7 +30,7 @@ def market_data_generator(symbols: List[str], num_events: int) -> Generator[Mark
             timestamp=datetime.now()
         )
         yield event
-        sleep(0.1) # Add a small delay to simulate real-time data flow
+        sleep(0.1)
 
 def publish_market_data(producer: KafkaProducer, symbols: List[str], num_events: int) -> None:
     """
