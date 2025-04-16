@@ -14,7 +14,7 @@ def create_kafka_consumer() -> KafkaConsumer:
         MARKET_EVENTS_TOPIC,
         bootstrap_servers=KAFKA_BROKERS,
         # Important:  Deserialize the JSON back into a dictionary, then use from_dict
-        value_deserializer=lambda m: MarketEvent.from_dict(json.loads(m.value.decode('utf-8'))),
+        value_deserializer=lambda m: MarketEvent.from_dict(json.loads(m['value'].decode('utf-8'))),
         auto_offset_reset='earliest',  # Start consuming from the beginning
         enable_auto_commit=True # Automatically commit offsets
     )
